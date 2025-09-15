@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,7 +36,7 @@ const Header = () => {
             </div>
           </div>
           <div className="hidden md:block">
-            <Button variant="warm" size="sm">
+            <Button variant="warm" size="lg">
               Donate
             </Button>
           </div>
@@ -57,18 +58,12 @@ const Header = () => {
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                HAI
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-foreground">
-                  HORN OF AFRICA
-                </h1>
-                <p className="text-sm text-muted-foreground">INSTITUTE</p>
-                <p className="text-xs text-primary italic">
-                  Ideas beyond borders
-                </p>
-              </div>
+              <Image
+                src="/assets/logo.jpeg"
+                width={200}
+                height={200}
+                alt="Logo Image"
+              />
             </motion.div>
 
             {/* Desktop Navigation */}

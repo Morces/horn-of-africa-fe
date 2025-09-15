@@ -5,6 +5,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight, Target, Eye, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const About = () => {
   const ref = useRef(null);
@@ -26,7 +27,7 @@ const About = () => {
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
             ABOUT <span className="text-primary">US</span>
           </h2>
-          <div className="w-24 h-1 bg-[--gradient-primary] mx-auto mb-8"></div>
+          <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
@@ -36,9 +37,11 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="relative">
-              <img
+              <Image
                 src="/assets/africa-map.jpg"
                 alt="Horn of Africa Region"
+                width={500}
+                height={500}
                 className="w-full rounded-2xl shadow-warm"
               />
               <motion.div
@@ -98,12 +101,10 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="bg-card rounded-2xl p-8 shadow-warm hover:shadow-glow transition-all duration-300 group"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-[--gradient-primary] rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
               <Target className="h-8 w-8 text-white" />
             </div>
-            <h4 className="text-2xl font-bold mb-4">
-              Our Mission
-            </h4>
+            <h4 className="text-2xl font-bold mb-4">Our Mission</h4>
             <p className="text-muted-foreground leading-relaxed">
               To empower and protect the rights of pastoralist women and girls
               through evidence-based development programs, advocacy, and
@@ -117,7 +118,7 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="bg-card rounded-2xl p-8 shadow-warm hover:shadow-glow transition-all duration-300 group"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-gradient-hero rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
               <Eye className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-2xl font-bold text-foreground mb-4">
@@ -136,8 +137,8 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="bg-card rounded-2xl p-8 shadow-warm hover:shadow-glow transition-all duration-300 group"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-gradient-warm rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Award className="h-8 w-8 text-foreground" />
+            <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Award className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-2xl font-bold text-foreground mb-4">
               Our Values

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+
 const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -28,11 +29,11 @@ const Footer = () => {
   ];
 
   const quickLinks = [
-    { name: "About Us", href: "#about" },
-    { name: "Our Work", href: "#work" },
-    { name: "Get Involved", href: "#involved" },
-    { name: "Resources", href: "#resources" },
-    { name: "Contact", href: "#contact" },
+    { name: "About Us", href: "/about" },
+    { name: "Our Work", href: "/work" },
+    { name: "Get Involved", href: "get-involved" },
+    { name: "Resources", href: "/resources" },
+    // { name: "Contact", href: "/contact" },
   ];
 
   return (
@@ -146,7 +147,7 @@ const Footer = () => {
                     placeholder="Your email"
                     className="flex-1 px-4 py-2 rounded-lg bg-background/10 border border-background/20 text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary-light"
                   />
-                  <Button variant="hero" size="sm">
+                  <Button  size="lg">
                     Subscribe
                   </Button>
                 </div>

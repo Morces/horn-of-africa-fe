@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Heart, Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const Hero = () => {
   return (
@@ -12,12 +13,14 @@ const Hero = () => {
     >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
-        <img
-          src=""
+        <Image
+          src="/assets/image-1.jpeg"
+          width={1000}
+          height={400}
           alt="Horn of Africa Institute - Empowering Communities"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+        <div className="absolute inset-0 bg-black/60 to-transparent"></div>
       </div>
 
       {/* Content */}
