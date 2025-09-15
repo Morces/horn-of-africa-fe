@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, Heart, Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
+  const router = useRouter();
+
   return (
     <section
       id="home"
@@ -78,7 +81,11 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <Button size="lg" className="group">
+              <Button
+                size="lg"
+                className="group"
+                onClick={() => router.push("/work")}
+              >
                 Learn About Our Work
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -86,6 +93,7 @@ const Hero = () => {
                 variant="outline"
                 size="lg"
                 className="border-white/30 text-white hover:bg-white/10"
+                onClick={() => router.push("/get-involved")}
               >
                 Get Involved
               </Button>
