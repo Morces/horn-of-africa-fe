@@ -23,6 +23,7 @@ const Header = () => {
   ];
 
   const resourceItems = [
+    { name: "Mobilization", href: "resources/mobilization" },
     { name: "HAI Training Toolkits", href: "/resources/training-toolkits" },
     { name: "Research Work", href: "/resources/research" },
     { name: "Gallery", href: "/resources/gallery" },

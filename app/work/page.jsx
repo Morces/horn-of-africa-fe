@@ -129,7 +129,7 @@ const Work = () => {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 { number: 9, label: "Counties Served", suffix: "+" },
-                { number: 15, label: "Years of Experience", suffix: "+" },
+                { number: 18, label: "Years of Experience", suffix: "+" },
                 { number: 10000, label: "Women Empowered", suffix: "+" },
               ].map((stat, index) => (
                 <div key={stat.label} className="text-center">

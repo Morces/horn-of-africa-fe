@@ -41,7 +41,7 @@ const Footer = () => {
     { name: "About Us", href: "/about" },
     { name: "Our Work", href: "/work" },
     { name: "Get Involved", href: "get-involved" },
-    { name: "Resources", href: "/resources" },
+    { name: "Resources", href: "/resources/mobilization" },
     // { name: "Contact", href: "/contact" },
   ];
 

@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, HandHeart, Building, Globe } from "lucide-react";
+import Link from "next/link";
 
-const Resources = () => {
+const Mobilization = () => {
   const mobilizationAreas = [
     {
       icon: <DollarSign className="h-8 w-8" />,
@@ -95,9 +96,7 @@ const Resources = () => {
                       <p className="text-muted-foreground mb-6">
                         {area.description}
                       </p>
-                      <Button className="w-full">
-                        {area.cta}
-                      </Button>
+                      <Button className="w-full">{area.cta}</Button>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -126,11 +125,12 @@ const Resources = () => {
                   Make a Donation
                 </Button>
                 <Button
+                  asChild
                   variant="outline"
                   size="lg"
                   className="bg-white/10 border-white text-white hover:bg-white hover:text-primary"
                 >
-                  Contact Us
+                  <Link href="/get-involved">Contact Us</Link>
                 </Button>
               </div>
             </motion.div>
@@ -197,4 +197,4 @@ const Resources = () => {
   );
 };
 
-export default Resources;
+export default Mobilization;
