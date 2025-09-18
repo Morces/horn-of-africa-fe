@@ -2,8 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Menu, X, Phone, MapPin } from "lucide-react";
+import { Menu, X, Phone, MapPin, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 
 const Header = () => {
@@ -13,8 +19,15 @@ const Header = () => {
     { name: "Home", href: "/" },
     { name: "Who We Are", href: "/about" },
     { name: "Our Work", href: "/work" },
-    { name: "Resource Mobilization", href: "/resources" },
     { name: "Get Involved", href: "/get-involved" },
+  ];
+
+  const resourceItems = [
+    { name: "HAI Training Toolkits", href: "/resources/training-toolkits" },
+    { name: "Research Work", href: "/resources/research" },
+    { name: "Gallery", href: "/resources/gallery" },
+    { name: "Reports", href: "/resources/reports" },
+    { name: "Blogs", href: "/resources/blogs" },
   ];
 
   return (
@@ -36,7 +49,7 @@ const Header = () => {
             </div>
           </div>
           <div className="hidden md:block">
-            <Button variant="warm" size="lg">
+            <Button variant="warm" size="sm">
               Donate
             </Button>
           </div>
@@ -59,10 +72,10 @@ const Header = () => {
               transition={{ type: "spring", stiffness: 300 }}
             >
               <Image
-                src="/assets/logo.jpeg"
+                src="/assets/logo-1.png"
                 width={200}
                 height={200}
-                alt="Logo Image"
+                alt="Logo"
               />
             </motion.div>
 
@@ -72,7 +85,7 @@ const Header = () => {
                 <motion.a
                   key={item.name}
                   href={item.href}
-                  className="text-foreground hover:text-primary transition-colors duration-300 font-medium relative group"
+                  className="text-foreground cursor-pointer hover:text-primary transition-colors duration-300 font-medium relative group"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
@@ -81,6 +94,24 @@ const Header = () => {
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
                 </motion.a>
               ))}
+
+              {/* Resource Mobilization Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="text-foreground hover:text-primary cursor-pointer transition-colors duration-300 font-medium relative group flex items-center gap-1">
+                  Resource Mobilization
+                  <ChevronDown className="h-4 w-4" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-background/95 backdrop-blur-md border border-border">
+                  {resourceItems.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
+                      <a href={item.href} className="w-full cursor-pointer">
+                        {item.name}
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -117,6 +148,24 @@ const Header = () => {
                   {item.name}
                 </a>
               ))}
+
+              {/* Mobile Resource Mobilization */}
+              <div className="border-t border-border pt-4">
+                <p className="text-sm text-muted-foreground mb-2">
+                  Resource Mobilization
+                </p>
+                {resourceItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="block text-foreground hover:text-primary transition-colors duration-300 font-medium py-2 pl-4"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+
               <Button variant="hero" className="w-full mt-4">
                 Donate
               </Button>

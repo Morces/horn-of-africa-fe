@@ -107,7 +107,7 @@ const GetInvolved = () => {
         </section>
 
         {/* Contact Form */}
-        <section className="py-16 bg-accent">
+        <section className="py-16 bg-accent-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center mb-12"

@@ -13,7 +13,16 @@ import {
   ArrowUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -36,6 +45,8 @@ const Footer = () => {
     // { name: "Contact", href: "/contact" },
   ];
 
+  const [showDialog, setShowDialog] = useState(false);
+
   return (
     <footer className="bg-foreground text-background relative overflow-hidden">
       {/* Background Pattern */}
@@ -56,17 +67,12 @@ const Footer = () => {
               className="lg:col-span-2"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center text-foreground font-bold text-xl">
-                  HAI
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">
-                    HORN OF AFRICA INSTITUTE
-                  </h3>
-                  <p className="text-sm text-primary-light italic">
-                    Ideas beyond borders
-                  </p>
-                </div>
+                <Image
+                  src="/assets/logo.jpeg"
+                  width={200}
+                  height={200}
+                  alt="Logo"
+                />
               </div>
 
               <p className="text-background/80 leading-relaxed mb-6 max-w-md">
@@ -123,6 +129,16 @@ const Footer = () => {
                     </a>
                   </motion.li>
                 ))}
+                <motion.li
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  onClick={() => setShowDialog(true)}
+                >
+                  <p className="text-background/80 cursor-pointer hover:text-primary-light transition-colors duration-300 inline-block hover:translate-x-1 transform">
+                    Download HAI Complaint Mechanism Guideline
+                  </p>
+                </motion.li>
               </ul>
             </motion.div>
 
@@ -147,9 +163,7 @@ const Footer = () => {
                     placeholder="Your email"
                     className="flex-1 px-4 py-2 rounded-lg bg-background/10 border border-background/20 text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary-light"
                   />
-                  <Button  size="lg">
-                    Subscribe
-                  </Button>
+                  <Button size="lg">Subscribe</Button>
                 </div>
               </div>
 
@@ -221,6 +235,28 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                Download HAI Complaint Mechanism Guideline
+              </DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <div className="my-3 flex flex-col gap-3">
+              <Button asChild onClick={() => setShowDialog(false)}>
+                <a
+                  href="/HAI-COMPLAINTS MECHANISMS GUIDELINES.pdf"
+                  download
+                  // className="text-primary underline hover:text-primary/80 "
+                >
+                  Download HAI Complaints Mechanisms Guidelines (PDF)
+                </a>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </footer>
   );

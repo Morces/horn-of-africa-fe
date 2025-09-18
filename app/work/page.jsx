@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Shield, Users } from "lucide-react";
 import Image from "next/image";
+import CountingNumber from "@/components/CountingNumber";
 
 const Work = () => {
   const workAreas = [
@@ -64,9 +65,7 @@ const Work = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl font-bold mb-4">
-                Latest News & Programs
-              </h2>
+              <h2 className="text-3xl font-bold mb-4">Programs</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Stay updated with our ongoing initiatives and impact in the Horn
                 of Africa
@@ -129,25 +128,23 @@ const Work = () => {
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
-                { number: "9", label: "Counties Served", suffix: "+" },
-                { number: "15", label: "Years of Experience", suffix: "+" },
-                { number: "10K", label: "Women Empowered", suffix: "+" },
+                { number: 9, label: "Counties Served", suffix: "+" },
+                { number: 15, label: "Years of Experience", suffix: "+" },
+                { number: 10000, label: "Women Empowered", suffix: "+" },
               ].map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  className="text-center"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                >
-                  <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                    {stat.number}
-                    {stat.suffix}
-                  </div>
+                <div key={stat.label} className="text-center">
+                  <CountingNumber
+                    end={stat.number}
+                    suffix={
+                      stat.label === "Women Empowered" ? "K+" : stat.suffix
+                    }
+                    className="text-4xl md:text-5xl font-bold text-primary mb-2"
+                    duration={2 + index * 0.5}
+                  />
                   <div className="text-muted-foreground font-medium">
                     {stat.label}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>

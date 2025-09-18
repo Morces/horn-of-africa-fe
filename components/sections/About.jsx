@@ -25,12 +25,12 @@ const About = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            ABOUT <span className="text-primary">US</span>
+            OUR <span className="text-primary">VALUES</span>
           </h2>
           <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+        {/* <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -44,14 +44,6 @@ const About = () => {
                 height={500}
                 className="w-full rounded-2xl shadow-warm"
               />
-              <motion.div
-                className="absolute -bottom-6 -right-6 bg-primary text-white p-6 rounded-2xl shadow-glow"
-                animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                <div className="text-3xl font-bold">2007</div>
-                <div className="text-sm">Established</div>
-              </motion.div>
             </div>
           </motion.div>
 
@@ -91,7 +83,7 @@ const About = () => {
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>
-        </div>
+        </div> */}
 
         {/* Mission, Vision, Values */}
         <div className="grid md:grid-cols-3 gap-8">
@@ -101,14 +93,15 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="bg-card rounded-2xl p-8 shadow-warm hover:shadow-glow transition-all duration-300 group"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center justify-center w-16 h-16 bg-gradient-primary rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
               <Target className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-2xl font-bold mb-4">Our Mission</h4>
             <p className="text-muted-foreground leading-relaxed">
-              To empower and protect the rights of pastoralist women and girls
-              through evidence-based development programs, advocacy, and
-              resilience building.
+              To work with others to transform lives of people especially
+              indigenous women excluded from the political, economic, and social
+              institutions that shape their lives. We do this by advancing
+              democratic values, women and human rights development.
             </p>
           </motion.div>
 
@@ -118,16 +111,15 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="bg-card rounded-2xl p-8 shadow-warm hover:shadow-glow transition-all duration-300 group"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center justify-center w-16 h-16 bg-gradient-hero rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
               <Eye className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-2xl font-bold text-foreground mb-4">
               Our Vision
             </h4>
             <p className="text-muted-foreground leading-relaxed">
-              A resilient Horn of Africa where pastoralist women and girls enjoy
-              equal rights, opportunities, and participation in sustainable
-              development.
+              A society free from exclusion and injustice where everyone can
+              achieve their full potential.
             </p>
           </motion.div>
 
@@ -137,7 +129,7 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="bg-card rounded-2xl p-8 shadow-warm hover:shadow-glow transition-all duration-300 group"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center justify-center w-16 h-16 bg-gradient-warm rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
               <Award className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-2xl font-bold text-foreground mb-4">

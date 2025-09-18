@@ -5,9 +5,13 @@ import { ArrowRight, Heart, Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { useState } from "react";
 
 const Hero = () => {
   const router = useRouter();
+
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <section
@@ -106,7 +110,10 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
             >
-              <div className="text-center">
+              <div
+                className="text-center cursor-pointer"
+                onClick={() => setShowModal(true)}
+              >
                 <div className="flex items-center justify-center w-12 h-12 bg-primary/20 rounded-full mb-3 mx-auto">
                   <Users className="h-6 w-6 text-primary-light" />
                 </div>
@@ -117,15 +124,8 @@ const Hero = () => {
                 <div className="flex items-center justify-center w-12 h-12 bg-primary/20 rounded-full mb-3 mx-auto">
                   <Heart className="h-6 w-6 text-primary-light" />
                 </div>
-                <div className="text-2xl font-bold text-primary-light">16+</div>
+                <div className="text-2xl font-bold text-primary-light">18+</div>
                 <div className="text-sm text-white/80">Years Experience</div>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 bg-primary/20 rounded-full mb-3 mx-auto">
-                  <Globe className="h-6 w-6 text-primary-light" />
-                </div>
-                <div className="text-2xl font-bold text-primary-light">7+</div>
-                <div className="text-sm text-white/80">Regional Countries</div>
               </div>
             </motion.div>
           </motion.div>
@@ -143,12 +143,11 @@ const Hero = () => {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               <h3 className="text-white text-xl font-semibold mb-4">
-                Our Mission
+                Our Vision
               </h3>
               <p className="text-white/90 leading-relaxed">
-                To empower pastoralist women and girls through evidence-based
-                development programs, advocacy, and resilience building across
-                the Horn of Africa region.
+                A society free from exclusion and injustice where everyone can
+                achieve their full potential.
               </p>
             </motion.div>
           </motion.div>
@@ -165,6 +164,17 @@ const Hero = () => {
           <div className="w-1 h-3 bg-white/50 rounded-full mt-2"></div>
         </div>
       </motion.div>
+
+      <Dialog open={showModal} onOpenChange={() => setShowModal(false)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Counties We've covered</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col">
+            <Image src="/map.png" width={700} height={600} alt="Kenyan Map" />
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
