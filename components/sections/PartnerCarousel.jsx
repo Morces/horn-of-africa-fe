@@ -1,35 +1,58 @@
 "use client";
 
+import { client } from "@/lib/contentful";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const PartnerCarousel = () => {
   // Sample partner logos - replace with actual partner data
   const partners = [
     {
       name: "Partner 1",
-      logo: "https://via.placeholder.com/150x80/4F46E5/FFFFFF?text=Partner+1",
+      logo: "https://placehold.co/150x80/4F46E5/FFFFFF?text=Partner+1",
     },
     {
       name: "Partner 2",
-      logo: "https://via.placeholder.com/150x80/7C3AED/FFFFFF?text=Partner+2",
+      logo: "https://placehold.co/150x80/7C3AED/FFFFFF?text=Partner+2",
     },
     {
       name: "Partner 3",
-      logo: "https://via.placeholder.com/150x80/2563EB/FFFFFF?text=Partner+3",
+      logo: "https://placehold.co/150x80/2563EB/FFFFFF?text=Partner+3",
     },
     {
       name: "Partner 4",
-      logo: "https://via.placeholder.com/150x80/DC2626/FFFFFF?text=Partner+4",
+      logo: "https://placehold.co/150x80/DC2626/FFFFFF?text=Partner+4",
     },
     {
       name: "Partner 5",
-      logo: "https://via.placeholder.com/150x80/059669/FFFFFF?text=Partner+5",
+      logo: "https://placehold.co/150x80/059669/FFFFFF?text=Partner+5",
     },
   ];
 
+  useEffect(() => {
+    fetchPartners();
+  }, []);
+
+  const [partnerList, setPartnerList] = useState(partners);
+
+  async function fetchPartners() {
+    try {
+      const res = await client.getEntries({ content_type: "partners" });
+
+      if (res.items && res.items.length > 0) {
+        setPartnerList(res.items);
+      } else {
+        setPartnerList([]);
+      }
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+      setPartnerList(partners);
+    }
+  }
+
   // Duplicate partners for seamless infinite scroll
-  const duplicatedPartners = [...partners, ...partners];
+  const duplicatedPartners = [...partnerList, ...partnerList];
 
   return (
     <section className="py-16 bg-accent/30 overflow-hidden">
@@ -51,15 +74,15 @@ const PartnerCarousel = () => {
           <div className="flex space-x-8 animate-scroll">
             {duplicatedPartners.map((partner, index) => (
               <div
-                key={`${partner.name}-${index}`}
-                className="flex-shrink-0 w-40 h-20 bg-background rounded-lg shadow-sm flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300"
+                key={index}
+                className="flex-shrink-0 w-82 h-40 bg-white rounded-lg shadow-sm flex items-center justify-center p-4 hover:scale-110 cursor-pointer transition-all duration-300"
               >
-                <Image
-                  src={partner.logo}
-                  alt={partner.name}
-                  width={100}
-                  height={50}
-                  className="max-w-full max-h-full object-contain"
+                <img
+                  src={`https:${partner?.fields?.image?.fields?.file?.url}`}
+                  alt={partner?.name}
+                  width={400}
+                  height={250}
+                  className="w-full h-full object-contain"
                 />
               </div>
             ))}

@@ -11,6 +11,7 @@ import {
   Mail,
   MapPin,
   ArrowUp,
+  Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -157,13 +158,15 @@ const Footer = () => {
                   Subscribe to our newsletter for updates on our programs and
                   impact.
                 </p>
-                <div className="flex gap-2">
+                <div className="flex w-full px-4 py-2 rounded-lg bg-background/10 border-none">
                   <input
                     type="email"
                     placeholder="Your email"
-                    className="flex-1 px-4 py-2 rounded-lg bg-background/10 border border-background/20 text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary-light"
+                    className=" text-background placeholder:text-background/60 focus:outline-none focus:ring-0"
                   />
-                  <Button size="lg">Subscribe</Button>
+                  <Button size="sm">
+                    <Send />
+                  </Button>
                 </div>
               </div>
 

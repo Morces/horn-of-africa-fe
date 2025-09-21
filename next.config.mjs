@@ -4,9 +4,16 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "via.placeholder.com",
+        hostname: "placehold.co",
+      },
+      {
+        protocol: "https",
+        hostname: "images.ctfassets.net",
+        port: "",
+        pathname: "/**",
       },
     ],
+    domains: ["images.ctfassets.net"],
   },
 };
 

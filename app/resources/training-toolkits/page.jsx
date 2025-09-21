@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, FileText, Users, Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
+import { client } from "@/lib/contentful";
 
 const TrainingToolkits = () => {
   const toolkits = [
@@ -99,6 +101,31 @@ const TrainingToolkits = () => {
     },
   ];
 
+  const [materials, setMaterials] = useState(toolkits);
+
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
+
+  async function fetchMaterials() {
+    try {
+      const res = await client.getEntries({
+        content_type: "trainingMaterials",
+      });
+
+      console.log(res?.items);
+
+      if (res.items && res.items.length > 0) {
+        setMaterials(res.items);
+      } else {
+        setMaterials([]);
+      }
+    } catch (error) {
+      console.error("Error fetching training materials:", error);
+      setMaterials([]);
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <main>
@@ -139,9 +166,9 @@ const TrainingToolkits = () => {
             </motion.div>
 
             <div className="grid lg:grid-cols-3 gap-8">
-              {toolkits.map((toolkit, index) => (
+              {materials.map((toolkit, index) => (
                 <motion.div
-                  key={toolkit.title}
+                  key={toolkit?.title || index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
@@ -151,29 +178,37 @@ const TrainingToolkits = () => {
                       <div className="flex items-start justify-between">
                         <FileText className="h-8 w-8 text-primary flex-shrink-0" />
                         <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                          {toolkit.type}
+                          PDF
                         </span>
                       </div>
-                      <CardTitle className="text-xl">{toolkit.title}</CardTitle>
+                      <CardTitle className="text-xl">
+                        {toolkit?.fields?.title}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground mb-4">
-                        {toolkit.description}
+                        {toolkit?.fields?.description}
                       </p>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
                         <div className="flex items-center gap-1">
-                          <FileText className="h-4 w-4" />
-                          {toolkit.pages} pages
-                        </div>
-                        <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />
-                          {new Date(toolkit.lastUpdated).toLocaleDateString()}
+                          {new Date(
+                            toolkit?.fields?.publishedOn
+                          ).toLocaleDateString()}
                         </div>
                       </div>
-                      <Button variant="outline" className="w-full">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download
-                      </Button>
+                      <a
+                        href={`https:${toolkit?.fields?.file?.fields?.file?.url}`}
+                        download={toolkit?.fields?.file?.fields?.file?.fileName}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full"
+                      >
+                        <Button variant="outline" className="w-full">
+                          <Download className="h-4 w-4 mr-2" />
+                          Download
+                        </Button>
+                      </a>
                     </CardContent>
                   </Card>
                 </motion.div>

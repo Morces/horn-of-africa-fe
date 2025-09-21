@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import Link from "next/link";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,7 +24,7 @@ const Header = () => {
   ];
 
   const resourceItems = [
-    { name: "Mobilization", href: "resources/mobilization" },
+    // { name: "Mobilization", href: "resources/mobilization" },
     { name: "HAI Training Toolkits", href: "/resources/training-toolkits" },
     { name: "Research Work", href: "/resources/research" },
     { name: "Gallery", href: "/resources/gallery" },
@@ -72,12 +73,14 @@ const Header = () => {
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <Image
-                src="/assets/logo-1.png"
-                width={200}
-                height={200}
-                alt="Logo"
-              />
+              <Link href="/">
+                <Image
+                  src="/assets/logo-1.png"
+                  width={200}
+                  height={200}
+                  alt="Logo"
+                />
+              </Link>
             </motion.div>
 
             {/* Desktop Navigation */}

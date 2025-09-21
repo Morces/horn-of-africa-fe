@@ -21,7 +21,7 @@ const Hero = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <Image
-          src="/assets/image-1.jpeg"
+          src="/assets/hero-image-1.jpg"
           width={1000}
           height={400}
           alt="Horn of Africa Institute - Empowering Communities"
@@ -161,12 +161,12 @@ const Hero = () => {
         transition={{ duration: 2, repeat: Infinity }}
       >
         <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/50 rounded-full mt-2"></div>
+          <div className="w-1 h-3 bg-primary rounded-full mt-2"></div>
         </div>
       </motion.div>
 
       <Dialog open={showModal} onOpenChange={() => setShowModal(false)}>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>Counties We've covered</DialogTitle>
           </DialogHeader>

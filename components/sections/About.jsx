@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, Target, Eye, Award } from "lucide-react";
+import { ArrowRight, Target, Eye, Award, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -30,63 +30,8 @@ const About = () => {
           <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
         </motion.div>
 
-        {/* <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <div className="relative">
-              <Image
-                src="/assets/africa-map.jpg"
-                alt="Horn of Africa Region"
-                width={500}
-                height={500}
-                className="w-full rounded-2xl shadow-warm"
-              />
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-6"
-          >
-            <h3 className="text-3xl font-bold text-foreground mb-6">
-              Horn of Africa Institute (HAI)
-            </h3>
-
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Formally Foundation for Pastoralist Women (FOPAWO), registered in
-              2007, is a regional women-led and evidence-based development
-              organization that works to empower and protect the rights of
-              pastoralist women and girls.
-            </p>
-
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              In Kenya, our programming landscape covers the Frontier Counties
-              Development Council (FCDC) economic bloc including Isiolo,
-              Turkana, Baringo, West Pokot, Samburu, Marsabit, Garissa, Wajir,
-              and Tana River counties.
-            </p>
-
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              HAI aims at expanding its operational scope to regional level for
-              purpose of experience and good practice sharing among pastoralist
-              women in Ethiopia, Somalia, Eritrea, Uganda, South Sudan, Sudan
-              and Djibouti.
-            </p>
-
-            <Button variant="default" size="lg" className="group">
-              Learn More About Our Impact
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </motion.div>
-        </div> */}
-
         {/* Mission, Vision, Values */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -98,10 +43,10 @@ const About = () => {
             </div>
             <h4 className="text-2xl font-bold mb-4">Our Mission</h4>
             <p className="text-muted-foreground leading-relaxed">
-              To work with others to transform lives of people especially
-              indigenous women excluded from the political, economic, and social
-              institutions that shape their lives. We do this by advancing
-              democratic values, women and human rights development.
+              To champion the rights of indigenous women and girls, working to
+              eliminate discrimination, violence, and inequality through
+              evidence-based programming and advocacy in Kenya and Horn of
+              Africa.
             </p>
           </motion.div>
 
@@ -122,26 +67,72 @@ const About = () => {
               achieve their full potential.
             </p>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="bg-card rounded-2xl p-8 shadow-warm hover:shadow-glow transition-all duration-300 group"
-          >
-            <div className="flex items-center justify-center w-16 h-16 bg-gradient-warm rounded-xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Award className="h-8 w-8 text-white" />
-            </div>
-            <h4 className="text-2xl font-bold text-foreground mb-4">
-              Our Values
-            </h4>
-            <p className="text-muted-foreground leading-relaxed">
-              Integrity, inclusivity, empowerment, sustainability, and
-              evidence-based approaches in all our development interventions and
-              advocacy efforts.
-            </p>
-          </motion.div>
         </div>
+
+        {/* Values */}
+        <div className="my-6">
+          <h3 className="text-3xl font-bold text-foreground mb-6 text-center">
+            Our Core Values
+          </h3>
+          <p className="text-muted-foreground text-center max-w-2xl mx-auto">
+            We are driven by a set of core values that guide our actions and
+            decisions:
+          </p>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="bg-gradient-to-br from-card/90 to-card rounded-2xl p-8 shadow-lg hover:shadow-glow transition-all duration-300 group"
+        >
+          <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-pink-500">
+            Our Core Values
+          </h2>
+
+          <ol className="space-y-4">
+            {[
+              {
+                title: "Integrity",
+                description:
+                  "We are committed to the highest forms of accountability and honesty.",
+              },
+              {
+                title: "Dignity",
+                description:
+                  "We believe in freedom of choice and autonomy regarding bodily integrity.",
+              },
+              {
+                title: "Solidarity",
+                description:
+                  "Inspired by the principles of diversity, equity, and equality, we empathize with and support women and girls to access social justice and human dignity.",
+              },
+              {
+                title: "Commitment",
+                description:
+                  "We are passionate about working for the safety and wellbeing of women and girls, fulfilling every promise we make.",
+              },
+            ].map((item, index) => (
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.2 }}
+                className="flex items-start gap-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors"
+              >
+                <CheckCircle className="w-6 h-6 text-primary mt-1" />
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.li>
+            ))}
+          </ol>
+        </motion.div>
       </div>
     </section>
   );

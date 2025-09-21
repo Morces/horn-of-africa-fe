@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { client } from "@/lib/contentful";
 
 const About = () => {
   const team = [
@@ -38,6 +40,27 @@ const About = () => {
       image: "https://via.placeholder.com/300x300/0891B2/FFFFFF?text=PL",
     },
   ];
+
+  const [members, setMembers] = useState(team);
+
+  useEffect(() => {
+    getMembers();
+  }, []);
+
+  async function getMembers() {
+    try {
+      const res = await client.getEntries({ content_type: "team" });
+
+      if (res.items && res.items.length > 0) {
+        setMembers(res.items);
+      } else {
+        setMembers([]);
+      }
+    } catch (error) {
+      console.error("Error fetching team members:", error);
+      setMembers([]);
+    }
+  }
 
   return (
     <div className="min-h-screen">
@@ -128,7 +151,7 @@ const About = () => {
                 <span className="text-primary">Build Resilience</span>
                 <span className="text-muted-foreground">|</span>
                 <span className="text-primary">
-                  Create Linkages & Opportunities for Women/Girls
+                  Create Linkages and Opportunities
                 </span>
               </div>
             </motion.div>
@@ -137,21 +160,21 @@ const About = () => {
               {[
                 {
                   number: "01",
-                  title: "Policy & Legislation",
+                  title: "Protect Rights",
                   description:
-                    "To influence policy and legislation to address the specific needs and challenges of Indigenous women and girls.",
+                    "Safeguard the fundamental rights of women and girls by implementing evidence-based knowledge programs, shaping policies and legislation that eliminate harmful practices, reduce gender-based violence, and guarantee",
                 },
                 {
                   number: "02",
-                  title: "Quality Education",
+                  title: "Build Resilience",
                   description:
-                    "Promote access to quality education for all, regardless of gender, ethnicity, or socioeconomic status.",
+                    "Strengthen the capacity of women, girls, and communities to withstand social, economic, and climate-related shocks through empowerment, education, and sustainable livelihoods.",
                 },
                 {
                   number: "03",
-                  title: "Climate Action",
+                  title: " Create Linkages and Opportunities",
                   description:
-                    "Promote equitable and inclusive climate action that considers the needs of marginalized groups, including women and girls.",
+                    "Expand opportunities for women and girls by fostering economic empowerment, leadership development, access to resources, and strategic partnerships that open pathways for growth.",
                 },
               ].map((objective, index) => (
                 <motion.div
@@ -197,9 +220,9 @@ const About = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {team?.map((member, index) => (
+              {members?.map((member, index) => (
                 <motion.div
-                  key={member.name}
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -208,15 +231,19 @@ const About = () => {
                     <CardContent className="p-6">
                       <div className="relative mb-4">
                         <img
-                          src={member.image}
-                          alt={member.name}
-                          className="w-32 h-32 rounded-full mx-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                          src={`https:${member?.fields?.image?.fields?.file?.url}`}
+                          alt={member?.fields?.fullName}
+                          width={300}
+                          height={300}
+                          className="w-52 h-52 rounded-full mx-auto object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                       <h3 className="text-xl font-semibold mb-2">
-                        {member.name}
+                        {member?.fields?.fullName}
                       </h3>
-                      <p className="text-primary font-medium">{member.title}</p>
+                      <p className="text-primary font-medium">
+                        {member.fields?.designation}
+                      </p>
                     </CardContent>
                   </Card>
                 </motion.div>

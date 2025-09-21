@@ -1,20 +1,34 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, MessageSquare, BarChart3, Users } from "lucide-react";
+import {
+  Shield,
+  MessageSquare,
+  BarChart3,
+  Users,
+  ArrowRight,
+} from "lucide-react";
 import Link from "next/link";
 
 const StrategicPillars = () => {
   const pillars = [
     {
+      id: 1,
       icon: <Shield className="h-8 w-8" />,
       title: "Resilience Building",
       description:
         "Strengthening the capacity of people especially women and girls, institutions and systems to prevent, mitigate and respond to diverse risks including crisis, conflict, natural disasters, climate and social and economic shocks.",
     },
     {
+      id: 2,
       icon: <MessageSquare className="h-8 w-8" />,
       title: "Advocacy & Communication",
       description:
@@ -44,7 +58,7 @@ const StrategicPillars = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Strategic Pillars
+            Strategic Plan
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Our framework for creating sustainable change and empowering
@@ -72,6 +86,16 @@ const StrategicPillars = () => {
                 <CardContent>
                   <p className="text-muted-foreground">{pillar.description}</p>
                 </CardContent>
+                <CardFooter>
+                  <Button variant="link" asChild>
+                    <div className="flex">
+                      <Link href={`/strategic-plan/${pillar?.id}`}>
+                        Learn More
+                      </Link>
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
+                  </Button>
+                </CardFooter>
               </Card>
             </motion.div>
           ))}

@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Users, Heart, MessageCircle, Calendar } from "lucide-react";
+import {
+  Users,
+  Heart,
+  Globe,
+  Calendar,
+  Building,
+  Binoculars,
+} from "lucide-react";
 
 const GetInvolved = () => {
   const involvementOptions = [
@@ -26,11 +33,11 @@ const GetInvolved = () => {
       action: "Donate Today",
     },
     {
-      icon: <MessageCircle className="h-8 w-8" />,
-      title: "Advocate",
+      icon: <Globe className="h-8 w-8" />,
+      title: "International Funding",
       description:
-        "Help us raise awareness about the challenges facing pastoralist communities.",
-      action: "Start Advocating",
+        "Collaborate with international organizations and donors to scale our impact across the region.",
+      action: "Learn More",
     },
     {
       icon: <Calendar className="h-8 w-8" />,
@@ -38,6 +45,20 @@ const GetInvolved = () => {
       description:
         "Participate in our events, workshops, and community gatherings.",
       action: "View Events",
+    },
+    {
+      icon: <Building className="h-8 w-8" />,
+      title: "Corporate Partnerships",
+      description:
+        "Partner with us to create sustainable change through corporate social responsibility initiatives.",
+      action: "Partner With Us",
+    },
+    {
+      icon: <Binoculars className="h-8 w-8" />,
+      title: "Research/Consultancy",
+      description:
+        "Collaborate with us on research projects or provide consultancy services to enhance our programs.",
+      action: "Reach Out",
     },
   ];
 
