@@ -103,8 +103,11 @@ const TrainingToolkits = () => {
 
   const [materials, setMaterials] = useState(toolkits);
 
+  const [allPolicies, setPolicies] = useState(policies);
+
   useEffect(() => {
     fetchMaterials();
+    fetchPolicies();
   }, []);
 
   async function fetchMaterials() {
@@ -112,8 +115,6 @@ const TrainingToolkits = () => {
       const res = await client.getEntries({
         content_type: "trainingMaterials",
       });
-
-      console.log(res?.items);
 
       if (res.items && res.items.length > 0) {
         setMaterials(res.items);
@@ -123,6 +124,23 @@ const TrainingToolkits = () => {
     } catch (error) {
       console.error("Error fetching training materials:", error);
       setMaterials([]);
+    }
+  }
+
+  async function fetchPolicies() {
+    try {
+      const res = await client.getEntries({
+        content_type: "operationalPolicies",
+      });
+
+      if (res.items && res.items.length > 0) {
+        setPolicies(res.items);
+      } else {
+        setPolicies([]);
+      }
+    } catch (error) {
+      console.error("Error fetching policies:", error);
+      setPolicies([]);
     }
   }
 
@@ -168,7 +186,7 @@ const TrainingToolkits = () => {
             <div className="grid lg:grid-cols-3 gap-8">
               {materials.map((toolkit, index) => (
                 <motion.div
-                  key={toolkit?.title || index}
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
@@ -234,9 +252,9 @@ const TrainingToolkits = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-8">
-              {policies.map((policy, index) => (
+              {allPolicies?.map((policy, index) => (
                 <motion.div
-                  key={policy.title}
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -246,24 +264,36 @@ const TrainingToolkits = () => {
                       <div className="flex items-start justify-between">
                         <Users className="h-8 w-8 text-primary flex-shrink-0" />
                         <span className="text-xs bg-secondary/80 text-secondary-foreground px-2 py-1 rounded">
-                          {policy.type}
+                          {policy?.fields?.docType}
                         </span>
                       </div>
-                      <CardTitle className="text-xl">{policy.title}</CardTitle>
+                      <CardTitle className="text-xl">
+                        {policy?.fields?.title}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground mb-4">
-                        {policy.description}
+                        {policy?.fields?.description}
                       </p>
                       <div className="flex items-center gap-1 text-sm text-muted-foreground mb-6">
                         <Calendar className="h-4 w-4" />
                         Updated:{" "}
-                        {new Date(policy.lastUpdated).toLocaleDateString()}
+                        {new Date(
+                          policy?.fields?.updatedOn
+                        ).toLocaleDateString()}
                       </div>
-                      <Button variant="outline" className="w-full">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Policy
-                      </Button>
+                      <a
+                        href={`https:${policy?.fields?.file?.fields?.file?.url}`}
+                        download={policy?.fields?.file?.fields?.file?.fileName}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full"
+                      >
+                        <Button variant="outline" className="w-full">
+                          <Download className="h-4 w-4 mr-2" />
+                          Download
+                        </Button>
+                      </a>
                     </CardContent>
                   </Card>
                 </motion.div>

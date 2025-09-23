@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, User, ArrowRight, Tag } from "lucide-react";
+import { useEffect, useState } from "react";
+import { client } from "@/lib/contentful";
+import { useRouter } from "next/navigation";
 
 const Blogs = () => {
   const blogPosts = [
@@ -145,6 +148,33 @@ const Blogs = () => {
     return colors[category] || "bg-gray-100 text-gray-800";
   };
 
+  const router = useRouter();
+
+  const [posts, setPosts] = useState(blogPosts);
+
+  useEffect(() => {
+    getBlogs();
+  }, []);
+
+  async function getBlogs() {
+    try {
+      const res = await client.getEntries({ content_type: "blogPage" });
+
+      if (res?.items && res?.items.length > 0) {
+        setPosts(res?.items);
+      } else {
+        setPosts([]);
+      }
+    } catch (error) {
+      console.error("Error fetching blog posts:", error);
+      setPosts([]);
+    }
+  }
+
+  const goToBlog = (id) => {
+    router.push(`/resources/blogs/${id}`);
+  };
+
   return (
     <div className="min-h-screen">
       <main>
@@ -184,8 +214,8 @@ const Blogs = () => {
             </motion.div>
 
             <div className="grid lg:grid-cols-2 gap-8 mb-16">
-              {blogPosts
-                .filter((post) => post.featured)
+              {posts
+                .filter((post) => post?.fields?.isFeatured)
                 .map((post, index) => (
                   <motion.div
                     key={post.id}
@@ -196,47 +226,26 @@ const Blogs = () => {
                     <Card className="overflow-hidden group hover:shadow-elegant transition-all duration-500 h-full">
                       <div className="relative overflow-hidden">
                         <img
-                          src={post.image}
-                          alt={post.title}
+                          href={`https:${post?.fields?.image?.fields?.file?.url}`}
+                          alt={post?.fields?.title}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute top-4 left-4">
-                          <span
-                            className={`text-xs px-3 py-1 rounded-full ${getCategoryColor(
-                              post.category
-                            )}`}
-                          >
-                            {post.category}
-                          </span>
-                        </div>
                       </div>
                       <CardHeader>
                         <CardTitle className="text-xl line-clamp-2">
-                          {post.title}
+                          {post?.fields?.title}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <p className="text-muted-foreground mb-4 line-clamp-3">
-                          {post.excerpt}
+                          {post?.fields?.description}
                         </p>
 
                         <div className="flex items-center gap-4 mb-4">
                           <div className="flex items-center gap-2">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={post.author.avatar} />
-                              <AvatarFallback>
-                                {post.author.name
-                                  .split(" ")
-                                  .map((n) => n[0])
-                                  .join("")}
-                              </AvatarFallback>
-                            </Avatar>
                             <div>
                               <div className="text-sm font-medium">
-                                {post.author.name}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                {post.author.role}
+                                {post?.fields?.author}
                               </div>
                             </div>
                           </div>
@@ -245,12 +254,18 @@ const Blogs = () => {
                         <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                           <div className="flex items-center gap-1">
                             <Calendar className="h-4 w-4" />
-                            {new Date(post.publishDate).toLocaleDateString()}
+                            {new Date(
+                              post?.fields?.publishedAt
+                            ).toLocaleDateString()}
                           </div>
-                          <span>{post.readTime}</span>
+                          <span>{post?.fields?.numberOfMinutes} read</span>
                         </div>
 
-                        <Button variant="outline" className="w-full">
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => goToBlog(post?.sys.id)}
+                        >
                           Read More
                           <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>
@@ -278,9 +293,9 @@ const Blogs = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogPosts.map((post, index) => (
+              {posts?.map((post, index) => (
                 <motion.div
-                  key={post.id}
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -288,53 +303,39 @@ const Blogs = () => {
                   <Card className="overflow-hidden group hover:shadow-elegant transition-all duration-500 h-full">
                     <div className="relative overflow-hidden">
                       <img
-                        src={post.image}
-                        alt={post.title}
+                        src={`https:${post?.fields?.file?.fields?.file?.url}`}
+                        alt={post?.fields?.title}
                         className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute top-3 left-3">
-                        <span
-                          className={`text-xs px-2 py-1 rounded ${getCategoryColor(
-                            post.category
-                          )}`}
-                        >
-                          {post.category}
-                        </span>
-                      </div>
                     </div>
                     <CardContent className="p-6">
                       <h3 className="font-semibold text-lg mb-2 line-clamp-2">
-                        {post.title}
+                        {post?.fields?.title}
                       </h3>
                       <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                        {post.excerpt}
+                        {post?.fields?.description}
                       </p>
 
                       <div className="flex items-center gap-2 mb-4">
-                        <Avatar className="h-6 w-6">
-                          <AvatarImage src={post.author.avatar} />
-                          <AvatarFallback className="text-xs">
-                            {post.author.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
                         <div className="text-sm">
-                          <div className="font-medium">{post.author.name}</div>
+                          <div className="font-medium">
+                            {post?.fields?.author}
+                          </div>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {new Date(post.publishDate).toLocaleDateString()}
+                          {new Date(
+                            post?.fields?.publishedAt
+                          ).toLocaleDateString()}
                         </div>
-                        <span>{post.readTime}</span>
+                        <span>{post?.fields?.numberOfMinutes} min read</span>
                       </div>
 
                       <div className="flex flex-wrap gap-1 mb-4">
-                        {post.tags.slice(0, 2).map((tag, tagIndex) => (
+                        {post?.fields?.tags?.map((tag, tagIndex) => (
                           <span
                             key={tagIndex}
                             className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
@@ -344,7 +345,12 @@ const Blogs = () => {
                         ))}
                       </div>
 
-                      <Button variant="outline" size="sm" className="w-full">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => goToBlog(post?.sys.id)}
+                      >
                         Read Article
                         <ArrowRight className="h-3 w-3 ml-2" />
                       </Button>

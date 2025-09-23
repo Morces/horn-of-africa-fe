@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Calendar, User, Eye } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { client } from "@/lib/contentful";
 
 const Research = () => {
   const researchWorks = [
@@ -85,6 +87,29 @@ const Research = () => {
     }
   };
 
+  const [research, setResearch] = useState([]);
+
+  useEffect(() => {
+    getResearch();
+  }, []);
+
+  async function getResearch() {
+    try {
+      const res = await client.getEntries({ content_type: "researchWork" });
+
+      console.log(res?.items[0]);
+
+      if (res.items && res.items.length > 0) {
+        setResearch(res.items);
+      } else {
+        setResearch([]);
+      }
+    } catch (error) {
+      console.error("Error fetching research work:", error);
+      setResearch([]);
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <main>
@@ -123,71 +148,77 @@ const Research = () => {
               </p>
             </motion.div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
-              {researchWorks.map((research, index) => (
-                <motion.div
-                  key={research.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Card className="h-full group hover:shadow-elegant transition-all duration-500">
-                    <CardHeader>
-                      <div className="flex items-start justify-between mb-2">
-                        <FileText className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                        <span
-                          className={`text-xs px-2 py-1 rounded ${getStatusColor(
-                            research.status
-                          )}`}
+            {research?.length === 0 ? (
+              <Card className="flex w-full justify-center items-center">
+                <p className="">No research work published yet!</p>
+              </Card>
+            ) : (
+              <div className="grid lg:grid-cols-2 gap-8">
+                {research?.map((research, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <Card className="h-full group hover:shadow-elegant transition-all duration-500">
+                      <CardHeader>
+                        <CardTitle className="text-lg leading-tight">
+                          {research?.fields?.title}
+                        </CardTitle>
+                        <div className="text-sm text-muted-foreground">
+                          {research?.fields?.category}
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                          {research?.fields?.description}
+                        </p>
+
+                        <div className="space-y-2 mb-4">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <User className="h-4 w-4" />
+                            {research?.fields?.author}
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Calendar className="h-4 w-4" />
+                            {new Date(
+                              research?.fields?.publishedOn
+                            ).toLocaleDateString()}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {research?.fields?.tags.map((tag, tagIndex) => (
+                            <span
+                              key={tagIndex}
+                              className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <a
+                          href={`https:${research?.fields?.file?.fields?.file?.url}`}
+                          download={
+                            research?.fields?.file?.fields?.file?.fileName
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full"
                         >
-                          {research.status}
-                        </span>
-                      </div>
-                      <CardTitle className="text-lg leading-tight">
-                        {research.title}
-                      </CardTitle>
-                      <div className="text-sm text-muted-foreground">
-                        {research.type}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                        {research.abstract}
-                      </p>
-
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <User className="h-4 w-4" />
-                          {research.author}
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="h-4 w-4" />
-                          {new Date(
-                            research.publicationDate
-                          ).toLocaleDateString()}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {research.tags.map((tag, tagIndex) => (
-                          <span
-                            key={tagIndex}
-                            className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      <Button variant="outline" className="w-full">
-                        <Eye className="h-4 w-4 mr-2" />
-                        View Research
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+                          <Button variant="outline" className="w-full">
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Research
+                          </Button>
+                        </a>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Heart, Shield, Users } from "lucide-react";
 import Image from "next/image";
 import CountingNumber from "@/components/CountingNumber";
+import { useEffect, useState } from "react";
+import { client } from "@/lib/contentful";
+import { sliceString } from "@/lib/sliceString";
+import SheetModal from "./SheetModal";
 
 const Work = () => {
   const workAreas = [
@@ -32,6 +36,36 @@ const Work = () => {
       image: "/assets/social-protection.jpeg",
     },
   ];
+
+  const [programs, setPrograms] = useState([]);
+
+  const [program, setProgram] = useState({});
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClick = (program) => {
+    setShowModal(true);
+    setProgram(program);
+  };
+
+  useEffect(() => {
+    getPrograms();
+  }, []);
+
+  async function getPrograms() {
+    try {
+      const res = await client.getEntries({ content_type: "workPrograms" });
+
+      if (res.items && res.items.length > 0) {
+        setPrograms(res.items);
+      } else {
+        setPrograms([]);
+      }
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+      setPrograms([]);
+    }
+  }
 
   return (
     <div className="min-h-screen">
@@ -72,42 +106,54 @@ const Work = () => {
               </p>
             </motion.div>
 
-            <div className="grid lg:grid-cols-3 gap-8">
-              {workAreas.map((area, index) => (
-                <motion.div
-                  key={area.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                >
-                  <Card className="overflow-hidden h-full group hover:shadow-elegant transition-all duration-500">
-                    <div className="relative overflow-hidden">
-                      <Image
-                        src={area.image}
-                        width={200}
-                        height={200}
-                        alt={area.title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-4 left-4 bg-primary text-primary-foreground p-2 rounded-lg">
-                        {area.icon}
+            {programs?.length === 0 ? (
+              <Card className="flex w-full justify-center items-center">
+                <p className="">No programs yet!</p>
+              </Card>
+            ) : (
+              <div className="grid lg:grid-cols-3 gap-8">
+                {programs.map((area, index) => (
+                  <motion.div
+                    key={area.title || index}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.2 }}
+                  >
+                    <Card className="overflow-hidden h-full group hover:shadow-elegant transition-all duration-500">
+                      <div className="relative overflow-hidden">
+                        <img
+                          src={`https:${area?.fields?.image?.fields?.file?.url}`}
+                          width={200}
+                          height={200}
+                          alt={area?.fields?.title}
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-4 left-4 bg-primary text-primary-foreground p-2 rounded-lg">
+                          <Heart className="h-8 w-8" />
+                        </div>
                       </div>
-                    </div>
-                    <CardHeader>
-                      <CardTitle className="text-xl">{area.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-6">
-                        {area.description}
-                      </p>
-                      <Button variant="outline" className="w-full">
-                        More Details
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+                      <CardHeader>
+                        <CardTitle className="text-xl">
+                          {area?.fields?.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground mb-6">
+                          {sliceString(area?.fields?.description, 120)}
+                        </p>
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => handleClick(area)}
+                        >
+                          More Details
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -150,6 +196,12 @@ const Work = () => {
           </div>
         </section>
       </main>
+
+      <SheetModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        program={program}
+      />
     </div>
   );
 };

@@ -5,103 +5,49 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, Video, Calendar, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+import { client } from "@/lib/contentful";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const Gallery = () => {
-  const photos = [
-    {
-      id: 1,
-      title: "Women's Leadership Training in Isiolo",
-      location: "Isiolo County",
-      date: "2024-02-15",
-      image:
-        "https://via.placeholder.com/400x300/4F46E5/FFFFFF?text=Training+Session",
-      description:
-        "Pastoralist women participating in leadership skills training",
-    },
-    {
-      id: 2,
-      title: "Climate Resilience Workshop",
-      location: "Turkana County",
-      date: "2024-01-20",
-      image: "https://via.placeholder.com/400x300/7C3AED/FFFFFF?text=Workshop",
-      description: "Community members learning climate adaptation strategies",
-    },
-    {
-      id: 3,
-      title: "Girl Child Education Campaign",
-      location: "Marsabit County",
-      date: "2023-12-10",
-      image: "https://via.placeholder.com/400x300/DC2626/FFFFFF?text=Education",
-      description:
-        "Promoting education access for girls in pastoralist communities",
-    },
-    {
-      id: 4,
-      title: "Peace Building Dialogue",
-      location: "Garissa County",
-      date: "2023-11-15",
-      image:
-        "https://via.placeholder.com/400x300/059669/FFFFFF?text=Peace+Building",
-      description: "Inter-community dialogue for conflict resolution",
-    },
-    {
-      id: 5,
-      title: "Water Project Launch",
-      location: "Wajir County",
-      date: "2023-10-08",
-      image:
-        "https://via.placeholder.com/400x300/D97706/FFFFFF?text=Water+Project",
-      description: "New water facility benefiting pastoralist families",
-    },
-    {
-      id: 6,
-      title: "Livestock Training Program",
-      location: "Samburu County",
-      date: "2023-09-22",
-      image: "https://via.placeholder.com/400x300/0891B2/FFFFFF?text=Livestock",
-      description: "Modern livestock management techniques training",
-    },
-  ];
+  const [content, setContent] = useState([]);
 
-  const videos = [
-    {
-      id: 1,
-      title: "HAI Impact Story: Transforming Lives in Northern Kenya",
-      duration: "5:42",
-      date: "2024-02-01",
-      thumbnail:
-        "https://via.placeholder.com/400x225/4F46E5/FFFFFF?text=Impact+Story",
-      description:
-        "Stories of women who have been empowered through HAI programs",
-    },
-    {
-      id: 2,
-      title: "Climate Adaptation in Pastoralist Communities",
-      duration: "8:15",
-      date: "2024-01-10",
-      thumbnail:
-        "https://via.placeholder.com/400x225/7C3AED/FFFFFF?text=Climate+Adaptation",
-      description: "Documentary on climate change adaptation strategies",
-    },
-    {
-      id: 3,
-      title: "Education: Breaking Barriers for Pastoralist Girls",
-      duration: "6:30",
-      date: "2023-12-05",
-      thumbnail:
-        "https://via.placeholder.com/400x225/DC2626/FFFFFF?text=Education+Story",
-      description: "Following girls who have overcome educational barriers",
-    },
-    {
-      id: 4,
-      title: "Peace Building Through Women's Groups",
-      duration: "4:20",
-      date: "2023-11-20",
-      thumbnail:
-        "https://via.placeholder.com/400x225/059669/FFFFFF?text=Peace+Building",
-      description: "How women's groups are fostering peace in communities",
-    },
-  ];
+  useEffect(() => {
+    getContent();
+  }, []);
+
+  async function getContent() {
+    try {
+      const res = await client.getEntries({ content_type: "gallery" });
+
+      if (res.items && res.items.length > 0) {
+        setContent(res.items);
+      } else {
+        setContent([]);
+      }
+    } catch (error) {
+      console.log("Error fetching content", error);
+      setContent([]);
+    }
+  }
+
+  const videos = content?.filter((con) => con?.fields?.docType === "video");
+
+  const photos = content?.filter((con) => con?.fields?.docType === "photo");
+
+  const [video, setVideo] = useState({});
+
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+
+  const handleVideoClick = (video) => {
+    setVideo(video);
+    setVideoModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen">
@@ -146,47 +92,55 @@ const Gallery = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
                 >
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {photos.map((photo, index) => (
-                      <motion.div
-                        key={photo.id}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                      >
-                        <Card className="overflow-hidden group hover:shadow-elegant transition-all duration-500">
-                          <div className="relative overflow-hidden">
-                            <img
-                              src={photo.image}
-                              alt={photo.title}
-                              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-                            <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm p-2 rounded-lg">
-                              <Camera className="h-4 w-4" />
-                            </div>
-                          </div>
-                          <CardContent className="p-6">
-                            <h3 className="font-semibold text-lg mb-2">
-                              {photo.title}
-                            </h3>
-                            <p className="text-muted-foreground text-sm mb-4">
-                              {photo.description}
-                            </p>
-                            <div className="space-y-2 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-2">
-                                <MapPin className="h-4 w-4" />
-                                {photo.location}
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Calendar className="h-4 w-4" />
-                                {new Date(photo.date).toLocaleDateString()}
+                  {photos?.length === 0 ? (
+                    <Card className="flex w-full justify-center items-center">
+                      <p className="">No photos found</p>
+                    </Card>
+                  ) : (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {photos?.map((photo, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 30 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6, delay: index * 0.1 }}
+                        >
+                          <Card className="overflow-hidden group hover:shadow-elegant transition-all duration-500">
+                            <div className="relative overflow-hidden">
+                              <img
+                                src={`https:${photo?.fields?.file?.fields?.file?.url}`}
+                                alt={photo?.fields?.title}
+                                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm p-2 rounded-lg">
+                                <Camera className="h-4 w-4" />
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
-                  </div>
+                            <CardContent className="p-6">
+                              <h3 className="font-semibold text-lg mb-2">
+                                {photo?.fields?.title}
+                              </h3>
+                              <p className="text-muted-foreground text-sm mb-4">
+                                {photo?.fields?.description}
+                              </p>
+                              <div className="space-y-2 text-sm text-muted-foreground">
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="h-4 w-4" />
+                                  {photo?.fields?.location}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="h-4 w-4" />
+                                  {new Date(
+                                    photo?.fields?.date
+                                  ).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                 </motion.div>
               </TabsContent>
 
@@ -196,10 +150,10 @@ const Gallery = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
                 >
-                  <div className="grid md:grid-cols-2 gap-8">
+                  <div className="grid md:grid-cols-3 gap-8">
                     {videos.map((video, index) => (
                       <motion.div
-                        key={video.id}
+                        key={index}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -207,30 +161,33 @@ const Gallery = () => {
                         <Card className="overflow-hidden group hover:shadow-elegant transition-all duration-500">
                           <div className="relative overflow-hidden">
                             <img
-                              src={video.thumbnail}
-                              alt={video.title}
-                              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                              src={`/vlc.png`}
+                              alt={"VLC Logo"}
+                              className="w-full h-30 object-contain flex justify-center items-center group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <Button variant="warm" size="lg">
+                              <Button
+                                variant="warm"
+                                size="lg"
+                                onClick={() => handleVideoClick(video)}
+                              >
                                 <Video className="h-5 w-5 mr-2" />
                                 Play Video
                               </Button>
                             </div>
-                            <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-sm">
-                              {video.duration}
-                            </div>
                           </div>
                           <CardContent className="p-6">
                             <h3 className="font-semibold text-lg mb-2">
-                              {video.title}
+                              {video?.fields?.title}
                             </h3>
                             <p className="text-muted-foreground text-sm mb-4">
-                              {video.description}
+                              {video?.fields?.description}
                             </p>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                               <Calendar className="h-4 w-4" />
-                              {new Date(video.date).toLocaleDateString()}
+                              {new Date(
+                                video?.fields?.date
+                              ).toLocaleDateString()}
                             </div>
                           </CardContent>
                         </Card>
@@ -243,6 +200,22 @@ const Gallery = () => {
           </div>
         </section>
       </main>
+
+      {/* Video Modal */}
+      <Dialog open={videoModalOpen} onOpenChange={setVideoModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{video?.fields?.title}</DialogTitle>
+          </DialogHeader>
+          <div className="my-3 w-full">
+            <video
+              src={`https:${video?.fields?.file?.fields?.file?.url}`}
+              controls
+              className="w-full h-auto"
+            ></video>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

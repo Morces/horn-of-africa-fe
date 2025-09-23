@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Download, Calendar, BarChart3 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { client } from "@/lib/contentful";
 
 const Reports = () => {
   const reports = [
@@ -121,6 +123,27 @@ const Reports = () => {
     return colors[category] || "bg-gray-100 text-gray-800";
   };
 
+  const [allReports, setReports] = useState(reports);
+
+  useEffect(() => {
+    getReports();
+  }, []);
+
+  async function getReports() {
+    try {
+      const res = await client.getEntries({ content_type: "reports" });
+
+      if (res?.items && res?.items.length > 0) {
+        setReports(res?.items);
+      } else {
+        setReports([]);
+      }
+    } catch (error) {
+      console.error("Error fetching reports:", error);
+      setReports([]);
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <main>
@@ -160,11 +183,11 @@ const Reports = () => {
             </motion.div>
 
             <div className="grid lg:grid-cols-3 gap-8 mb-16">
-              {reports
-                .filter((report) => report.featured)
+              {allReports
+                .filter((report) => report?.fields?.isFeatured)
                 .map((report, index) => (
                   <motion.div
-                    key={report.title}
+                    key={index}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.2 }}
@@ -175,37 +198,45 @@ const Reports = () => {
                           <BarChart3 className="h-8 w-8 text-primary flex-shrink-0" />
                           <span
                             className={`text-xs px-2 py-1 rounded ${getCategoryColor(
-                              report.category
+                              report?.fields?.tag
                             )}`}
                           >
-                            {report.category}
+                            {report?.fields?.tag}
                           </span>
                         </div>
                         <CardTitle className="text-xl">
-                          {report.title}
+                          {report?.fields?.title}
                         </CardTitle>
-                        <div className="text-sm text-primary font-medium">
+                        {/* <div className="text-sm text-primary font-medium">
                           {report.type} • {report.year}
-                        </div>
+                        </div> */}
                       </CardHeader>
                       <CardContent>
                         <p className="text-muted-foreground mb-4 text-sm">
-                          {report.description}
+                          {report?.fields?.description}
                         </p>
                         <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
                           <div className="flex items-center gap-1">
-                            <FileText className="h-3 w-3" />
-                            {report.pages} pages
-                          </div>
-                          <div className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
-                            {new Date(report.publishDate).toLocaleDateString()}
+                            {new Date(
+                              report?.fields?.date
+                            ).toLocaleDateString()}
                           </div>
                         </div>
-                        <Button variant="hero" className="w-full">
-                          <Download className="h-4 w-4 mr-2" />
-                          Download Report
-                        </Button>
+                        <a
+                          href={`https:${report?.fields?.file?.fields?.file?.url}`}
+                          download={
+                            report?.fields?.file?.fields?.file?.fileName
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full"
+                        >
+                          <Button variant="hero" className="w-full">
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Report
+                          </Button>
+                        </a>
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -232,9 +263,9 @@ const Reports = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {reports.map((report, index) => (
+              {allReports?.map((report, index) => (
                 <motion.div
-                  key={report.title}
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.05 }}
@@ -248,40 +279,46 @@ const Reports = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="font-semibold text-lg leading-tight">
-                              {report.title}
+                              {report?.fields?.title}
                             </h3>
                             <span
                               className={`text-xs px-2 py-1 rounded whitespace-nowrap ml-2 ${getCategoryColor(
-                                report.category
+                                report?.fields?.tag
                               )}`}
                             >
-                              {report.category}
+                              {report?.fields?.tag}
                             </span>
                           </div>
-                          <div className="text-sm text-primary font-medium mb-2">
+                          {/* <div className="text-sm text-primary font-medium mb-2">
                             {report.type} • {report.year}
-                          </div>
+                          </div> */}
                           <p className="text-muted-foreground text-sm mb-4">
-                            {report.description}
+                            {report?.fields?.description}
                           </p>
                           <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
                             <div className="flex items-center gap-4">
                               <div className="flex items-center gap-1">
-                                <FileText className="h-3 w-3" />
-                                {report.pages} pages
-                              </div>
-                              <div className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
                                 {new Date(
-                                  report.publishDate
+                                  report?.fields?.date
                                 ).toLocaleDateString()}
                               </div>
                             </div>
                           </div>
-                          <Button variant="outline" size="sm">
-                            <Download className="h-4 w-4 mr-2" />
-                            Download
-                          </Button>
+                          <a
+                            href={`https:${report?.fields?.file?.fields?.file?.url}`}
+                            download={
+                              report?.fields?.file?.fields?.file?.fileName
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full"
+                          >
+                            <Button variant="outline" size="sm">
+                              <Download className="h-4 w-4 mr-2" />
+                              Download
+                            </Button>
+                          </a>
                         </div>
                       </div>
                     </CardContent>
