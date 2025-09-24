@@ -31,11 +31,26 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: MessageCircle, href: "#", label: "WhatsApp" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    {
+      icon: Facebook,
+      href: "https://www.facebook.com/profile.php?id=61553011951103&sk=about_details",
+      label: "Facebook",
+    },
+    {
+      icon: Twitter,
+      href: " https://x.com/hornofafrica_4?s=21&t=tsgYofesSVRI_3OMnRWD2g",
+      label: "Twitter",
+    },
+    {
+      icon: Instagram,
+      href: "https://www.instagram.com/hornafricainstitute/",
+      label: "Instagram",
+    },
+    {
+      icon: Linkedin,
+      href: "https://www.linkedin.com/in/horn-of-africa-institute-b29a85300?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3B3UIudHoKSLuCcbzD7USK1g%3D%3D",
+      label: "LinkedIn",
+    },
   ];
 
   const quickLinks = [
@@ -180,6 +195,7 @@ const Footer = () => {
                     <motion.a
                       key={social.label}
                       href={social.href}
+                      target="_blank"
                       className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center hover:bg-primary-light hover:scale-110 transition-all duration-300"
                       whileHover={{ y: -2 }}
                       initial={{ opacity: 0, scale: 0 }}
