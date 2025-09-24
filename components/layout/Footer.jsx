@@ -114,7 +114,9 @@ const Footer = () => {
                 <div className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-primary-light flex-shrink-0" />
                   <span className="text-background/80">
-                    info@hornafricainstitute.co.ke
+                    <a href="mailto:info@hornafricainstitute.co.ke">
+                      info@hornafricainstitute.co.ke
+                    </a>
                   </span>
                 </div>
               </div>
