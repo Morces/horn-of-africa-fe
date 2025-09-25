@@ -49,7 +49,10 @@ const About = () => {
 
   async function getMembers() {
     try {
-      const res = await client.getEntries({ content_type: "team" });
+      const res = await client.getEntries({
+        content_type: "team",
+        order: "fields.designationNo",
+      });
 
       if (res.items && res.items.length > 0) {
         setMembers(res.items);

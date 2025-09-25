@@ -4,58 +4,61 @@ import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 
 export default function Donate() {
-  const paypalRef = useRef();
-  const [amount, setAmount] = useState("10.00"); // default donation
+  const paypalRef = useRef(null);
+  const [amount, setAmount] = useState("10.00");
   const [loading, setLoading] = useState(false);
+  const [sdkReady, setSdkReady] = useState(false);
 
+  // Once the PayPal SDK script loads, mark ready
+  const handleScriptLoad = () => setSdkReady(true);
+
+  // Re-render PayPal Buttons whenever amount changes AND SDK is ready
   useEffect(() => {
-    if (window.paypal) {
-      window.paypal
-        .Buttons({
-          style: {
-            layout: "vertical",
-            color: "gold",
-            shape: "rect",
-            label: "donate",
-          },
+    if (!sdkReady || !window.paypal || !paypalRef.current) return;
 
-          // Create order via our API
-          createOrder: async () => {
-            setLoading(true);
-            const res = await fetch("/api/paypal/create-order", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ amount }),
-            });
-            const data = await res.json();
-            setLoading(false);
-            return data.id;
-          },
+    // Clear any previous buttons
+    paypalRef.current.innerHTML = "";
 
-          // Capture order via our API
-          onApprove: async (data) => {
-            setLoading(true);
-            const res = await fetch("/api/paypal/capture-order", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ orderID: data.orderID }),
-            });
-            const details = await res.json();
-            setLoading(false);
-            alert(
-              `✅ Thank you, ${details.payer.name.given_name}, for donating $${amount}!`
-            );
-          },
-
-          onError: (err) => {
-            setLoading(false);
-            console.error("PayPal error:", err);
-            alert("Something went wrong. Please try again.");
-          },
-        })
-        .render(paypalRef.current);
-    }
-  }, [amount]);
+    window.paypal
+      .Buttons({
+        style: {
+          layout: "vertical",
+          color: "gold",
+          shape: "rect",
+          label: "donate",
+        },
+        createOrder: async () => {
+          setLoading(true);
+          const res = await fetch("/api/paypal/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount }),
+          });
+          const data = await res.json();
+          setLoading(false);
+          return data.id;
+        },
+        onApprove: async (data) => {
+          setLoading(true);
+          const res = await fetch("/api/paypal/capture-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderID: data.orderID }),
+          });
+          const details = await res.json();
+          setLoading(false);
+          alert(
+            `✅ Thank you, ${details.payer.name.given_name}, for donating $${amount}!`
+          );
+        },
+        onError: (err) => {
+          setLoading(false);
+          console.error("PayPal error:", err);
+          alert("Something went wrong. Please try again.");
+        },
+      })
+      .render(paypalRef.current);
+  }, [amount, sdkReady]);
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -93,11 +96,9 @@ export default function Donate() {
       </div>
 
       <Script
-        src={`https://www.paypal.com/sdk/js?client-id=${
-          process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ||
-          process.env.PAYPAL_CLIENT_ID
-        }&currency=USD`}
+        src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&currency=USD`}
         strategy="afterInteractive"
+        onLoad={handleScriptLoad}
       />
     </div>
   );

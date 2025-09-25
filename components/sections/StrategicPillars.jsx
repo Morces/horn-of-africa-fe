@@ -62,7 +62,10 @@ const StrategicPillars = () => {
   async function getPillars() {
     setLoading(true);
     try {
-      const res = await client.getEntries({ content_type: "strategicPillars" });
+      const res = await client.getEntries({
+        content_type: "strategicPillars",
+        order: "fields.no",
+      });
 
       if (res.items && res?.items.length > 0) {
         setPillars(res?.items);
@@ -97,8 +100,8 @@ const StrategicPillars = () => {
         </motion.div>
 
         {loading ? (
-          <div className="w-full justify-center items-center my-5">
-            <ClipLoader size={50} color={"#123abc"} loading={loading} />
+          <div className="w-full justify-center items-center my-5 min-h-[200px]">
+            <ClipLoader size={50} color={"#CC320A"} loading={loading} />
           </div>
         ) : allPillars?.length === 0 ? (
           <Card className="w-full justify-center items-center">
