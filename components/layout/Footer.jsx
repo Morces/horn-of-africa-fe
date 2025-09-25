@@ -12,6 +12,7 @@ import {
   MapPin,
   ArrowUp,
   Send,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -175,7 +176,7 @@ const Footer = () => {
                   Subscribe to our newsletter for updates on our programs and
                   impact.
                 </p>
-                <div className="flex w-full px-4 py-2 rounded-lg bg-background/10 border-none">
+                <div className="flex w-full max-md:w-fit px-4 py-2 rounded-lg bg-background/10 border-none">
                   <input
                     type="email"
                     placeholder="Your email"
@@ -230,23 +231,23 @@ const Footer = () => {
               </motion.p>
 
               <div className="flex items-center gap-6">
-                <a
+                <Link
                   href="#"
                   className="text-background/60 hover:text-primary-light text-sm transition-colors"
                 >
                   Privacy Policy
-                </a>
-                <a
+                </Link>
+                <Link
                   href="#"
                   className="text-background/60 hover:text-primary-light text-sm transition-colors"
                 >
                   Terms of Service
-                </a>
+                </Link>
 
                 {/* Back to Top */}
                 <motion.button
                   onClick={scrollToTop}
-                  className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary-light hover:scale-110 transition-all duration-300"
+                  className="w-10 h-10 bg-primary/20 cursor-pointer rounded-lg flex items-center justify-center hover:bg-primary-light hover:scale-110 transition-all duration-300"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -258,23 +259,20 @@ const Footer = () => {
         </div>
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
-          <DialogContent>
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>
-                Download HAI Complaint Mechanism Guideline
-              </DialogTitle>
+              <DialogTitle>HAI Complaint Mechanism Guideline</DialogTitle>
               <DialogDescription></DialogDescription>
             </DialogHeader>
-            <div className="my-3 flex flex-col gap-3">
-              <Button asChild onClick={() => setShowDialog(false)}>
-                <a
-                  href="/HAI-COMPLAINTS MECHANISMS GUIDELINES.pdf"
-                  download
-                  // className="text-primary underline hover:text-primary/80 "
-                >
-                  Download HAI Complaints Mechanisms Guidelines (PDF)
-                </a>
-              </Button>
+            <div className="my-3">
+              <a href="/HAI-COMPLAINTS MECHANISMS GUIDELINES.pdf" download>
+                <Button asChild onClick={() => setShowDialog(false)}>
+                  <div className="flex gap-1">
+                    <Download />
+                    <span>HAI Complaints Mechanisms Guidelines (PDF)</span>
+                  </div>
+                </Button>
+              </a>
             </div>
           </DialogContent>
         </Dialog>

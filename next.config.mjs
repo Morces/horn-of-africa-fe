@@ -13,7 +13,6 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
-    domains: ["images.ctfassets.net"],
   },
 };
 

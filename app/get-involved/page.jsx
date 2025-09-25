@@ -15,6 +15,9 @@ import {
   Building,
   Binoculars,
 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const GetInvolved = () => {
   const involvementOptions = [
@@ -24,6 +27,7 @@ const GetInvolved = () => {
       description:
         "Join our team of dedicated volunteers and contribute your skills to our programs and initiatives.",
       action: "Volunteer Now",
+      href: "#contact",
     },
     {
       icon: <Heart className="h-8 w-8" />,
@@ -31,6 +35,7 @@ const GetInvolved = () => {
       description:
         "Make a financial contribution to support our work in empowering pastoralist women and girls.",
       action: "Donate Today",
+      href: "/donate",
     },
     {
       icon: <Globe className="h-8 w-8" />,
@@ -38,6 +43,7 @@ const GetInvolved = () => {
       description:
         "Collaborate with international organizations and donors to scale our impact across the region.",
       action: "Learn More",
+      href: "/donate",
     },
     {
       icon: <Calendar className="h-8 w-8" />,
@@ -45,6 +51,7 @@ const GetInvolved = () => {
       description:
         "Participate in our events, workshops, and community gatherings.",
       action: "View Events",
+      href: "/work",
     },
     {
       icon: <Building className="h-8 w-8" />,
@@ -52,6 +59,7 @@ const GetInvolved = () => {
       description:
         "Partner with us to create sustainable change through corporate social responsibility initiatives.",
       action: "Partner With Us",
+      href: "#contact",
     },
     {
       icon: <Binoculars className="h-8 w-8" />,
@@ -59,8 +67,52 @@ const GetInvolved = () => {
       description:
         "Collaborate with us on research projects or provide consultancy services to enhance our programs.",
       action: "Reach Out",
+      href: "#contact",
     },
   ];
+
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          first_name,
+          last_name,
+          email,
+          subject,
+          message,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      toast.success("Message sent successfully!");
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+    } catch (error) {
+      toast.error("Failed to send message. Please try again later.");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -118,7 +170,9 @@ const GetInvolved = () => {
                       <p className="text-muted-foreground mb-6">
                         {option.description}
                       </p>
-                      <Button className="w-full">{option.action}</Button>
+                      <Button className="w-full" asChild>
+                        <Link href={option?.href}>{option.action}</Link>
+                      </Button>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -128,7 +182,7 @@ const GetInvolved = () => {
         </section>
 
         {/* Contact Form */}
-        <section className="py-16 bg-accent-background">
+        <section className="py-16 bg-accent-background" id="contact">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center mb-12"
@@ -157,6 +211,8 @@ const GetInvolved = () => {
                         <Input
                           id="firstName"
                           placeholder="Enter your first name"
+                          value={first_name}
+                          onChange={(e) => setFirstName(e.target.value)}
                         />
                       </div>
                       <div className="space-y-2">
@@ -164,6 +220,8 @@ const GetInvolved = () => {
                         <Input
                           id="lastName"
                           placeholder="Enter your last name"
+                          value={last_name}
+                          onChange={(e) => setLastName(e.target.value)}
                         />
                       </div>
                     </div>
@@ -174,12 +232,19 @@ const GetInvolved = () => {
                         id="email"
                         type="email"
                         placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="subject">Subject</Label>
-                      <Input id="subject" placeholder="What is this about?" />
+                      <Input
+                        id="subject"
+                        placeholder="What is this about?"
+                        value={subject}
+                        onChange={(e) => setSubject(e.target.value)}
+                      />
                     </div>
 
                     <div className="space-y-2">
@@ -188,11 +253,19 @@ const GetInvolved = () => {
                         id="message"
                         placeholder="Tell us how you'd like to get involved or any questions you have..."
                         className="min-h-32"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                       />
                     </div>
 
-                    <Button variant="hero" size="lg" className="w-full">
-                      Send Message
+                    <Button
+                      variant="hero"
+                      size="lg"
+                      className="w-full"
+                      disabled={loading}
+                      onClick={handleSubmit}
+                    >
+                      {loading ? "Sending..." : "Send Message"}
                     </Button>
                   </form>
                 </CardContent>

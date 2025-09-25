@@ -51,8 +51,8 @@ const Header = () => {
             </div>
           </div>
           <div className="hidden md:block">
-            <Button variant="warm" size="sm">
-              Donate
+            <Button variant="warm" size="sm" asChild>
+              <Link href="/donate">Donate</Link>
             </Button>
           </div>
         </div>
