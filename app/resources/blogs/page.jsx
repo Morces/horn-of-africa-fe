@@ -226,7 +226,7 @@ const Blogs = () => {
                     <Card className="overflow-hidden group hover:shadow-elegant transition-all duration-500 h-full">
                       <div className="relative overflow-hidden">
                         <img
-                          href={`https:${post?.fields?.image?.fields?.file?.url}`}
+                          src={`https:${post?.fields?.image?.fields?.file?.url}`}
                           alt={post?.fields?.title}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                         />
