@@ -55,8 +55,7 @@ const About = () => {
 				order: "fields.designationNo",
 			});
 
-			console.log(res?.items);
-
+	
 			if (res.items && res.items.length > 0) {
 				setMembers(res.items);
 			} else {
@@ -237,13 +236,12 @@ const About = () => {
 										transition={{ delay: index * 0.1 }}
 										className="bg-card rounded-2xl border border-border hover:shadow-lg transition-all group"
 									>
-										<div className="relative w-full aspect-square mb-6 overflow-hidden rounde bg-muted">
+										<div className="relative w-full aspect-square overflow-hidden rounded-t-2xl bg-muted">
 											{photoUrl ? (
 												<img
 													src={`https:${photoUrl}`}
 													alt={member?.fields?.fullName || "Team member"}
-													fill
-													className="object-cover group-hover:scale-105 transition-transform duration-300"
+													className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
 												/>
 											) : (
 												<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10">
@@ -252,8 +250,12 @@ const About = () => {
 											)}
 										</div>
 										<div className="flex flex-col p-4">
-											<h3 className="text-xl font-bold mb-2">{member?.fields?.fullName}</h3>
-											<p className="text-muted-foreground">{member?.fields?.designation}</p>
+											<h3 className="text-xl font-bold mb-2">
+												{member?.fields?.fullName}
+											</h3>
+											<p className="text-muted-foreground">
+												{member?.fields?.designation}
+											</p>
 										</div>
 									</motion.div>
 								);
