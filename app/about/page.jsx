@@ -55,7 +55,6 @@ const About = () => {
 				order: "fields.designationNo",
 			});
 
-	
 			if (res.items && res.items.length > 0) {
 				setMembers(res.items);
 			} else {
@@ -101,25 +100,27 @@ const About = () => {
 								<h2 className="text-3xl font-bold mb-6">Our Story</h2>
 								<div className="prose prose-lg max-w-none">
 									<p className="text-muted-foreground mb-6">
-										Horn of Africa Institute (HAI), formally Foundation for
-										Pastoralist Women (FOPAWO) Registered in 2007, is regional
-										based not-for-profit women-led and evidenced based
-										development organization that works to empower and protect
-										the rights of pastoralist women/girls.
+										Founded in 2007, the Horn of Africa Institute (HAI)—formerly
+										the Foundation for Pastoralist Women—is a national,
+										women-led non-profit dedicated to the protection and
+										empowerment of indigenous women and girls. We bridge the gap
+										between evidence-based research and grassroots action,
+										operating across Kenya’s Frontier Counties, including
+										Isiolo, Turkana, Samburu, and Marsabit.
 									</p>
 									<p className="text-muted-foreground mb-6">
-										In Kenya, our programming landscape covers the Frontier
-										Counties Development Council (FCDC) economic bloc (Isiolo,
-										Turkana, Baringo, West Pokot, Samburu, Marsabit, Garissa,
-										Wajir, and Tana River counties).
+										Beyond direct programming, HAI provides specialized
+										consultancy in research, baseline studies, and Monitoring
+										and Evaluation (M&E) to ensure social interventions are
+										data-driven and effective.
 									</p>
-									<p className="text-muted-foreground">
+									{/* <p className="text-muted-foreground">
 										HAI aims at expanding its operational scope to regional
 										level for purpose of experience and good practice sharing
 										among pastoralist women in Ethiopia, Somalia, Eritrea,
 										Uganda, South Sudan, Sudan and Djibouti (East and central
 										Africa).
-									</p>
+									</p> */}
 								</div>
 							</motion.div>
 

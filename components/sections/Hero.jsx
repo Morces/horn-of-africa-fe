@@ -74,9 +74,8 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              A regional women-led development organization empowering and
-              protecting the rights of pastoralist women and girls across the
-              Horn of Africa.
+              A women-led development organization empowering and
+              protecting the rights of pastoralist women and girls.
             </motion.p>
 
             <motion.div
